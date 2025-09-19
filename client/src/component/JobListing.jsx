@@ -5,36 +5,36 @@ import JobCard from './JobCard';
 
 const JobListing = () => {
 
-    const {isSearched,searchFilter,setSearchFilter,jobs}=useContext(AppContext);
+    const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext);
 
-    const[showFilter,setShowFilter]=useState(false);
- 
-    const[currentPage,setCurrentPage]=useState(1);
+    const [showFilter, setShowFilter] = useState(false);
 
-    const [selectedCategories,setSelectedCategories]=useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const [selectedLocation,setSelectedLocation]=useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const [filteredJobs,setFilteredJobs]=useState(jobs);
+    const [selectedLocation, setSelectedLocation] = useState([]);
 
-     //It will toggle the Category Array List like [cloud,Network,...]
-    const handleCategoryChange=(category)=>{
+    const [filteredJobs, setFilteredJobs] = useState(jobs);
+
+    //It will toggle the Category Array List like [cloud,Network,...]
+    const handleCategoryChange = (category) => {
         setSelectedCategories(
-            prev=>prev.includes(category)?prev.filter(c => c!== category):[...prev,category]      
+            prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
         )
     }
 
-     //It will toggle the Location Array List like [cloud,Network,...]
-    const handleLocationChange=(location)=>{
+    //It will toggle the Location Array List like [cloud,Network,...]
+    const handleLocationChange = (location) => {
         setSelectedLocation(
-            prev=>prev.includes(location)?prev.filter(c => c!== location):[...prev,location]      
+            prev => prev.includes(location) ? prev.filter(c => c !== location) : [...prev, location]
         )
     }
 
 
     //Using UseEffect we create several boolean variable to get Filtered data On the basis on selectedCategories,location,searchFilter
 
-    useEffect(()=>{
+    useEffect(() => {
 
         //Use Or Operation to check the current job of jobs is give true for matchesCategory,matchesLocation,matchesTitle,matechesSearchLocation then only we add the current job to the filtered job
 
@@ -46,120 +46,120 @@ const JobListing = () => {
 
         const matechesSearchLocation = job => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
-        const newFilteredJobs=jobs.slice().reverse().filter(
+        const newFilteredJobs = jobs.slice().reverse().filter(
             job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matechesSearchLocation(job)
         )
 
         setFilteredJobs(newFilteredJobs)
         setCurrentPage(1);
 
-    },[jobs,selectedCategories,selectedLocation,searchFilter])
+    }, [jobs, selectedCategories, selectedLocation, searchFilter])
 
-  return (
-    <div className='container 2xl:px-20 mx-auto flex flex-col lg:flex-row max-lg:space-y-8 py-8'>
-        
-        {/* Side Bar */}
+    return (
+        <div className='container 2xl:px-20 mx-auto flex flex-col lg:flex-row max-lg:space-y-8 py-8'>
 
-        <div className='w-full lg:w-1/4 bg-white px-4'>
+            {/* Side Bar */}
 
-            {/* Search Filter from Hero Component */}
+            <div className='w-full lg:w-1/4 bg-white px-4'>
 
-            {
-                isSearched&&( searchFilter.title!=="" || searchFilter.location!=="" ) && (
+                {/* Search Filter from Hero Component */}
 
-                    <>
-                        <h3 className='font-medium text-lg mb-4'>Current Search</h3>     
-                        <div className='mb-4 text-gray-600'> 
-                            {searchFilter.title&&(
-                                <span className='inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded'>
-                                    {searchFilter.title}
-                                    <img onClick={(e)=>setSearchFilter(prev => ({...prev,title:""})) } className="cursor-pointer"
-                                    src={assets.cross_icon} alt="" />
-                                </span>
-                            )}
+                {
+                    isSearched && (searchFilter.title !== "" || searchFilter.location !== "") && (
 
-                            {searchFilter.location&&(
-                                <span className='ml-2 inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded'>
-                                    {searchFilter.location}
-                                    <img className='cursor-pointer' onClick={(e)=>setSearchFilter(prev => ({...prev,location:""})) }
-                                    src={assets.cross_icon} alt="" />
-                                </span>
-                            )}
-                        </div>
-                    </>
-                )
-            }
+                        <>
+                            <h3 className='font-medium text-lg mb-4'>Current Search</h3>
+                            <div className='mb-4 text-gray-600'>
+                                {searchFilter.title && (
+                                    <span className='inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded'>
+                                        {searchFilter.title}
+                                        <img onClick={(e) => setSearchFilter(prev => ({ ...prev, title: "" }))} className="cursor-pointer"
+                                            src={assets.cross_icon} alt="" />
+                                    </span>
+                                )}
 
-            <button onClick={e=>setShowFilter(prev => !prev)} className='px-6 py-1.5 rounded border border-gray-400 lg:hidden'>
-                {showFilter?"Close":"Filters"}
-            </button>
+                                {searchFilter.location && (
+                                    <span className='ml-2 inline-flex items-center gap-2.5 bg-red-50 border border-red-200 px-4 py-1.5 rounded'>
+                                        {searchFilter.location}
+                                        <img className='cursor-pointer' onClick={(e) => setSearchFilter(prev => ({ ...prev, location: "" }))}
+                                            src={assets.cross_icon} alt="" />
+                                    </span>
+                                )}
+                            </div>
+                        </>
+                    )
+                }
 
-            {/* Search By Category */}
+                <button onClick={e => setShowFilter(prev => !prev)} className='px-6 py-1.5 rounded border border-gray-400 lg:hidden hover:bg-gray-100'>
+                    {showFilter ? "Close" : "Search by Filters"}
+                </button>
 
-            <div className={showFilter ? "":"max-lg:hidden"}>
-                <h3 className='font-medium text-lg py-4'>Search by Categories</h3>
-                <ul className='space-y-4 text-gray-600'>
-                    {
-                        JobCategories.map((Category,index)=>(
-                            <li key={index} className='flex gap-3 items-center'>
-                                <input type="checkbox" className='scale-125' onChange={()=>handleCategoryChange(Category)} checked={selectedCategories.includes(Category)}/>
-                                {Category}
-                            </li>
-                        ))
-                    }
-                </ul>
-            </div>
+                {/* Search By Category */}
 
-            {/* Search By Location */}
-
-            <div className={showFilter ? "":"max-lg:hidden"}>
-                <h3 className='font-medium text-lg py-4 pt-14'>Search by Location</h3>
-                <ul className='space-y-4 text-gray-600'>
-                    {
-                        JobLocations.map((Location,index)=>(
-                            <li key={index} className='flex gap-3 items-center'>
-                                <input type="checkbox" className='scale-125' onChange={()=>handleLocationChange(Location)} checked={selectedLocation.includes(Location)}/>
-                                {Location}
-                            </li>
-                        ))
-                    }
-                </ul>
-            </div>
-        </div>
-
-        {/* JOb Listing */}
-
-        <section className='w-full lg:w-3/4 text-gray-800 max-lg:px-4'>
-            <h3 className='font-medium text-3xl py-2' id='job-list'>Latest Jobs</h3>
-            <p className='mb-8'>Get your desired job from top companies</p>    
-            <div className='grid grid-cols-1 sm:grid-cols-1 sm:grid-cols2 xl:grid-cols-3 gap-4'>
-                {filteredJobs.slice((currentPage-1)*6,currentPage*6).map((job,index)=>
-                    <JobCard key={index} job={job}/>
-                )}
-            </div>
-
-
-            {/* pagination */}
-            {filteredJobs.length>0 && (
-                <div className='flex items-center justify-center space-x-2 mt-10'>
-                    <a href="#job-list">
-                        <img onClick={()=>setCurrentPage(Math.max(currentPage-1),1)} src={assets.left_arrow_icon}/>
-                    </a>
-                    {Array.from({length:Math.ceil(filteredJobs.length/6)}).map((_,index)=>(
-                        <a key={index} href="#job-list">
-                            <button onClick={()=>setCurrentPage(index+1)} className={`w-10 h-10 flex items-center justify-center border border-gray-300 rounded ${currentPage===index+1 ? 'bg-blue-100 text-blue-500':"text-gray-500"}`}>{index+1}</button>
-                        </a>
-                    ))}
-                    <a href="#job-list">
-                        <img onClick={()=>setCurrentPage(Math.min(currentPage+1,Math.ceil(filteredJobs.length/6)))} src={assets.right_arrow_icon}/>
-                    </a>
+                <div className={showFilter ? "" : "max-lg:hidden"}>
+                    <h3 className='font-medium text-lg py-4'>Search by Categories</h3>
+                    <ul className='space-y-4 text-gray-600'>
+                        {
+                            JobCategories.map((Category, index) => (
+                                <li key={index} className='flex gap-3 items-center'>
+                                    <input type="checkbox" className='scale-125' onChange={() => handleCategoryChange(Category)} checked={selectedCategories.includes(Category)} />
+                                    {Category}
+                                </li>
+                            ))
+                        }
+                    </ul>
                 </div>
-            )}
 
-        </section>
+                {/* Search By Location */}
 
-    </div>
-  )
+                <div className={showFilter ? "" : "max-lg:hidden"}>
+                    <h3 className='font-medium text-lg py-4 pt-14'>Search by Location</h3>
+                    <ul className='space-y-4 text-gray-600'>
+                        {
+                            JobLocations.map((Location, index) => (
+                                <li key={index} className='flex gap-3 items-center'>
+                                    <input type="checkbox" className='scale-125' onChange={() => handleLocationChange(Location)} checked={selectedLocation.includes(Location)} />
+                                    {Location}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            {/* JOb Listing */}
+
+            <section className='w-full lg:w-3/4 text-gray-800 max-lg:px-4'>
+                <h3 className='font-medium text-3xl py-2' id='job-list'>Latest Jobs</h3>
+                <p className='mb-8'>Get your desired job from top companies</p>
+                <div className='grid grid-cols-1 sm:grid-cols-1 sm:grid-cols2 xl:grid-cols-3 gap-4'>
+                    {filteredJobs.slice((currentPage - 1) * 6, currentPage * 6).map((job, index) =>
+                        <JobCard key={index} job={job} />
+                    )}
+                </div>
+
+
+                {/* pagination */}
+                {filteredJobs.length > 0 && (
+                    <div className='flex items-center justify-center space-x-2 mt-10'>
+                        <a href="#job-list">
+                            <img onClick={() => setCurrentPage(Math.max(currentPage - 1), 1)} src={assets.left_arrow_icon} />
+                        </a>
+                        {Array.from({ length: Math.ceil(filteredJobs.length / 6) }).map((_, index) => (
+                            <a key={index} href="#job-list">
+                                <button onClick={() => setCurrentPage(index + 1)} className={`w-10 h-10 flex items-center justify-center border border-gray-300 rounded ${currentPage === index + 1 ? 'bg-blue-100 text-blue-500' : "text-gray-500"}`}>{index + 1}</button>
+                            </a>
+                        ))}
+                        <a href="#job-list">
+                            <img onClick={() => setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6)))} src={assets.right_arrow_icon} />
+                        </a>
+                    </div>
+                )}
+
+            </section>
+
+        </div>
+    )
 }
 
 export default JobListing
