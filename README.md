@@ -3,7 +3,7 @@
 A fully functional **Job Listing and Job Searching platform** built with the **MERN stack** (MongoDB, Express, React, Node.js). This platform enables **job seekers** to search and apply for job openings and allows **recruiters** to manage job posts and applications.
 
 ---
-![Application Preview](client/src/assets/amazon_logo.png)
+![Application Preview](client/src/assets/job-portal-new-client-olive.vercel.app_.png)
 
 [![Live Demo](https://img.shields.io/badge/Visit_Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://job-portal-new-client-olive.vercel.app/)
 
