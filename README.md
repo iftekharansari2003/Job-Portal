@@ -9,7 +9,7 @@ A fully functional **Job Listing and Job Searching platform** built with the **M
 
 
 ## 🚀 Features
-
+ 
 ### 👨‍💻 Job Seekers
 - 📃 Login and Sign up through clerk authentication
 - 🔍 Search for job openings by title, location, or category
