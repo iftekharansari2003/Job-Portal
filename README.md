@@ -1,6 +1,6 @@
 # 🧑‍💼 Full Stack Job Portal Website - Insider Jobs
 
-A fully functional **Job Listing and Job Searching platform** built with the **MERN stack** (MongoDB, Express, React, Node.js). This platform enables **job seekers** to search and apply for job openings and allows **recruiters** to manage job posts and applications.
+A fully functional **Job Listing and Job Searching platform** built with the **MERN stack** (MongoDB, Express, React, Node.js). This platform enables **job seekers** to search and apply for job openings and allows **recruiters** to manage job posts and applications. 
 
 ---
 ![Application Preview](client/src/assets/job-portal-new-client-olive.vercel.app_.png)
